@@ -51,15 +51,19 @@
 
   Things.launch();
 
-  let tasks =
-    Things.toDos().map(toDo =>
-      JSON.stringify({
+  let tasks = [];
+
+  Things.toDos().forEach(function(toDo) {
+    tasks.push(
+      {
         uuid: stringToUuid(toDo.id()),
         status: "pending",
         entry: ISOdate(toDo.creationDate()),
-        description: toDo.name()
-      })
+        description: toDo.name(),
+        tags: toDo.tagNames().split(",")
+      }
     )
+  })
 
-  console.log(JSON.stringify(tasks))
+  app.doShellScript(`echo ${JSON.stringify(tasks)} > "tasks.json"`);
 })();
