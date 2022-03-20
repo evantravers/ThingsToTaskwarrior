@@ -60,10 +60,21 @@
   }
 
   const addProject = function(task, toDo) {
+    let project = "";
+    let dot     = "";
+    let area    = "";
+
     if (toDo.project()) {
-      // You could optionally have Areas as dot notation in the project name
-      task.project = `${toDo.project().name()}`
+      project = `${toDo.project().name()}`
     }
+    if (toDo.project() && toDo.project().area()) {
+      area = `${toDo.project().area().name()}`
+    }
+    if (project != "" && area != "") {
+      dot = "."
+    }
+
+    task.project = `${area}${dot}${project}`
   }
 
   // https://taskwarrior.org/docs/using_dates.html#due
