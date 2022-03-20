@@ -51,6 +51,18 @@
     });
   }
 
+  const addTags = function(task, toDo) {
+    if (toDo.tagNames()) {
+      task.tags = toDo.tagNames().split(", ")
+    }
+  }
+
+  const addAnnotations = function(task, toDo) {
+    if (toDo.notes() != "") {
+      task.annotation = [toDo.notes()]
+    }
+  }
+
   const writeTextToFile = function(text, file) {
     try {
 
@@ -73,16 +85,17 @@
   let tasks = [];
 
   Things.toDos().forEach(function(toDo) {
-    tasks.push(
-      {
-        uuid: stringToUuid(toDo.id()),
-        status: "pending",
-        entry: ISOdate(toDo.creationDate()),
-        description: toDo.name(),
-        tags: toDo.tagNames().split(", "),
-        annotation: [toDo.notes()]
-      }
-    )
+    let task = {
+      uuid: stringToUuid(toDo.id()),
+      entry: ISOdate(toDo.creationDate()),
+      description: toDo.name(),
+      status: "pending"
+    }
+
+    addTags(task, toDo)
+    addAnnotations(task, toDo)
+
+    tasks.push(task)
   })
 
   writeTextToFile(tasks.map(t => JSON.stringify(t)).join("\n"), "tasks.json")
