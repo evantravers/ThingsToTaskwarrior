@@ -79,7 +79,8 @@
         status: "pending",
         entry: ISOdate(toDo.creationDate()),
         description: toDo.name(),
-        tags: toDo.tagNames().split(", ")
+        tags: toDo.tagNames().split(", "),
+        annotation: [toDo.notes()]
       }
     )
   })
