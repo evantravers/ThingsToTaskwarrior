@@ -44,9 +44,26 @@
 
   const stringToUuid = (str) => {
     str = str.replace('-', '');
-    return 'xxxxxxxx-xxxx-4xxx-xxxx-xxxxxxxxxxxx'.replace(/[x]/g, function(c, p) {
+    return 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'.replace(/[x]/g, function(c, p) {
       return str[p % str.length];
     });
+  }
+
+  const writeTextToFile = function(text, file) {
+    try {
+
+      // Convert the file to a string
+      // var fileString = file.toString()
+      var str = $.NSString.alloc.initWithUTF8String(text);
+      str.writeToFileAtomicallyEncodingError(file, true, $.NSUTF8StringEncoding, null)
+
+      // Return a boolean indicating that writing was successful
+      return true
+    }
+    catch(error) {
+      // Return a boolean indicating that writing was successful
+      return false
+    }
   }
 
   Things.launch();
@@ -60,10 +77,10 @@
         status: "pending",
         entry: ISOdate(toDo.creationDate()),
         description: toDo.name(),
-        tags: toDo.tagNames().split(",")
+        tags: toDo.tagNames().split(", ")
       }
     )
   })
 
-  app.doShellScript(`echo ${JSON.stringify(tasks)} > "tasks.json"`);
+  writeTextToFile(JSON.stringify(tasks), "tasks.json")
 })();
