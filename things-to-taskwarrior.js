@@ -52,21 +52,34 @@
   }
 
   const addTags = function(task, toDo) {
-    if (toDo.tagNames()) {
-      task.tags = toDo.tagNames().split(", ")
-    }
+    if (toDo.tagNames()) { task.tags = toDo.tagNames().split(", ") }
   }
 
   const addAnnotations = function(task, toDo) {
-    if (toDo.notes() != "") {
-      task.annotation = [toDo.notes()]
-    }
+    if (toDo.notes() != "") { task.annotation = [toDo.notes()] }
   }
 
   const addProject = function(task, toDo) {
     if (toDo.project()) {
       // You could optionally have Areas as dot notation in the project name
       task.project = `${toDo.project().name()}`
+    }
+  }
+
+  // https://taskwarrior.org/docs/using_dates.html#due
+  const addDue = function(task, toDo) {
+    if (toDo.dueDate()) { task.due = ISOdate(toDo.dueDate()) }
+  }
+
+  // I'm judging `scheduled` to be equivalent to `When` in Things 3. If you use
+  // `When` to delay things till later, you'd want to map this to `wait` in
+  // Taskwarrior.
+  //
+  // https://taskwarrior.org/docs/using_dates.html#scheduled
+  // https://taskwarrior.org/docs/using_dates.html#wait
+  const addScheduled = function(task, toDo) {
+    if (toDo.activationDate()) {
+      task.scheduled = ISOdate(toDo.activationDate())
     }
   }
 
@@ -102,6 +115,9 @@
     addTags(task, toDo)
     addAnnotations(task, toDo)
     addProject(task, toDo)
+
+    addDue(task, toDo)
+    addScheduled(task, toDo)
 
     tasks.push(task)
   })
