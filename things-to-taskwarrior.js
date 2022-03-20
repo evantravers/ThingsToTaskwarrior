@@ -63,6 +63,13 @@
     }
   }
 
+  const addProject = function(task, toDo) {
+    if (toDo.project()) {
+      // You could optionally have Areas as dot notation in the project name
+      task.project = `${toDo.project().name()}`
+    }
+  }
+
   const writeTextToFile = function(text, file) {
     try {
 
@@ -94,6 +101,7 @@
 
     addTags(task, toDo)
     addAnnotations(task, toDo)
+    addProject(task, toDo)
 
     tasks.push(task)
   })
