@@ -107,4 +107,5 @@
   })
 
   writeTextToFile(tasks.map(t => JSON.stringify(t)).join("\n"), "tasks.json")
+  console.log("Now run: `task import tasks.json`")
 })();
