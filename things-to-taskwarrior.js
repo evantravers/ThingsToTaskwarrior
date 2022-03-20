@@ -8,34 +8,34 @@
 
   // Things doesn't give access to a Checklist for a To-do, so I'm scraping the
   // screen for it. :P
-  let scrapeChecklist = function(todo) {
+  const processChecklist = function(task, toDo) {
     app.setTheClipboardTo("[NONE]")
 
     Things.activate()
-    Things.show(todo)
+    Things.show(toDo)
 
     delay(.1)
     se.keystroke('c', { using: [ 'command down' ] }) // boy this is nasty
     delay(.1)
 
-   let str = app.theClipboard()
-      .replaceAll(/\r/g, "\n")
-      .split(/\n/)
-      .filter(function(line) {
-        if (line.match(/^- /m)) {
-          return true;
-        }
-        return false;
-      })
-      .map(l => l.replace(/^- /, '    - [ ] '))
-      .join("\n");
-
-    if (str.length > 1) {
-      return "\n\n" + str;
-    }
-    else {
-      return '';
-    }
+    let str =
+    app.theClipboard()
+    .replaceAll(/\r/g, "\n")
+    .split(/\n/)
+    .filter(function(line) {
+      if (line.match(/^- /m)) {
+        return true;
+      }
+      return false;
+    })
+    .map(function(checklistItem) {
+      if (task.annotation) {
+        task.annotation.push(checklistItem)
+      }
+      else {
+        task.annotation = [checklistItem]
+      }
+    })
   }
 
   const ISOdate = function(date) {
@@ -53,13 +53,6 @@
 
   const addTags = function(task, toDo) {
     if (toDo.tagNames()) { task.tags = toDo.tagNames().split(", ") }
-  }
-
-  // https://taskwarrior.org/docs/udas.html
-  // The rough equivalent of UDA is tags in Things. Here you can define some
-  // rules for your tags to try and define them as UDA.
-  const processTagsToUda = function(task) {
-    // nil
   }
 
   const addAnnotations = function(task, toDo) {
@@ -131,9 +124,10 @@
     }
 
     addTags(task, toDo)
-    processTagsToUda(task)
     addAnnotations(task, toDo)
     addProject(task, toDo)
+
+    processChecklist(task, toDo)
 
     addDue(task, toDo)
     addScheduled(task, toDo)
