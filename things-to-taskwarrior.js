@@ -55,6 +55,13 @@
     if (toDo.tagNames()) { task.tags = toDo.tagNames().split(", ") }
   }
 
+  // https://taskwarrior.org/docs/udas.html
+  // The rough equivalent of UDA is tags in Things. Here you can define some
+  // rules for your tags to try and define them as UDA.
+  const processTagsToUda = function(task) {
+    // nil
+  }
+
   const addAnnotations = function(task, toDo) {
     if (toDo.notes() != "") { task.annotation = [toDo.notes()] }
   }
@@ -124,6 +131,7 @@
     }
 
     addTags(task, toDo)
+    processTagsToUda(task)
     addAnnotations(task, toDo)
     addProject(task, toDo)
 
