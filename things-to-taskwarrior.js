@@ -47,7 +47,15 @@
 
   Things.launch();
 
-  Things.toDos().map(toDo =>
-    console.log(stringToUuid(toDo.id()))
-  )
+  let tasks =
+    Things.toDos().map(toDo =>
+      {
+        uuid: stringToUuid(toDo.id())
+        status: "pending"
+        entry: toDo.creationDate()
+        description: toDo.name()
+      }
+    )
+
+  console.log(JSON.stringify(tasks))
 })();
