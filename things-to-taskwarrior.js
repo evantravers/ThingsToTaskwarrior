@@ -38,6 +38,10 @@
     }
   }
 
+  const ISOdate = function(date) {
+    return date.toISOString().replace(/[^A-Z0-9]/g, '')
+  }
+
   const stringToUuid = (str) => {
     str = str.replace('-', '');
     return 'xxxxxxxx-xxxx-4xxx-xxxx-xxxxxxxxxxxx'.replace(/[x]/g, function(c, p) {
@@ -49,12 +53,12 @@
 
   let tasks =
     Things.toDos().map(toDo =>
-      {
-        uuid: stringToUuid(toDo.id())
-        status: "pending"
-        entry: toDo.creationDate()
+      JSON.stringify({
+        uuid: stringToUuid(toDo.id()),
+        status: "pending",
+        entry: ISOdate(toDo.creationDate()),
         description: toDo.name()
-      }
+      })
     )
 
   console.log(JSON.stringify(tasks))
