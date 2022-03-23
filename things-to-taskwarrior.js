@@ -23,19 +23,21 @@
     .replaceAll(/\r/g, "\n")
     .split(/\n/)
     .filter(function(line) {
-      if (line.match(/^- /m)) {
+      if (line.match(/^- [ ]/m)) {
         return true;
       }
       return false;
     })
-    .map(function(checklistItem) {
+    .join("\n")
+
+    if (str != "") {
       if (task.annotation) {
-        task.annotation.push(checklistItem)
+        task.annotation.push(str)
       }
       else {
-        task.annotation = [checklistItem]
+        task.annotation = [str]
       }
-    })
+    }
   }
 
   const ISOdate = function(date) {
