@@ -14,9 +14,9 @@
     Things.activate()
     Things.show(toDo)
 
-    delay(.2)
+    delay(.1)
     se.keystroke('c', { using: [ 'command down' ] }) // boy this is nasty
-    delay(.2)
+    delay(.1)
 
     let str =
     app.theClipboard()
