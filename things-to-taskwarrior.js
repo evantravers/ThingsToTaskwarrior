@@ -30,7 +30,7 @@
     })
     .join("\n")
 
-    if (str != "") { addAnnotation(task, str) }
+    if (str != "") { addAnnotation(task, "Checklist:\n" + str) }
   }
 
   const ISOdate = function(date) {
