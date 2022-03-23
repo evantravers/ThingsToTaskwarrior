@@ -30,14 +30,7 @@
     })
     .join("\n")
 
-    if (str != "") {
-      if (task.annotation) {
-        task.annotation.push(str)
-      }
-      else {
-        task.annotation = [str]
-      }
-    }
+    if (str != "") { addAnnotation(task, str) }
   }
 
   const ISOdate = function(date) {
@@ -57,8 +50,18 @@
     if (toDo.tagNames()) { task.tags = toDo.tagNames().split(", ") }
   }
 
-  const addAnnotations = function(task, toDo) {
-    if (toDo.notes() != "") { task.annotation = [toDo.notes()] }
+  const addNotes = function(task, toDo) {
+    if (toDo.notes() != "") { addAnnotation(task, toDo.notes()) }
+  }
+
+  const addAnnotation = function(task, annotation) {
+    let obj = {
+      entry: task.entry,
+      description: annotation
+    }
+
+    if (task.annotations) { task.annotations.push(obj) }
+    else { task.annotations = [obj]}
   }
 
   const addProject = function(task, toDo) {
@@ -126,7 +129,7 @@
     }
 
     addTags(task, toDo)
-    addAnnotations(task, toDo)
+    addNotes(task, toDo)
     addProject(task, toDo)
 
     processChecklist(task, toDo)
