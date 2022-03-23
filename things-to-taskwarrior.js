@@ -14,16 +14,16 @@
     Things.activate()
     Things.show(toDo)
 
-    delay(.1)
+    delay(.2)
     se.keystroke('c', { using: [ 'command down' ] }) // boy this is nasty
-    delay(.1)
+    delay(.2)
 
     let str =
     app.theClipboard()
     .replaceAll(/\r/g, "\n")
     .split(/\n/)
     .filter(function(line) {
-      if (line.match(/^- [ ]/m)) {
+      if (line.match(/^- \[ \]/m)) {
         return true;
       }
       return false;
