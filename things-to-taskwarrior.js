@@ -171,7 +171,7 @@
     tasks.push(task)
   })
 
-  Things.projects().filter(p => p.status == "open").forEach(function(proj) {
+  Things.projects().filter(p => p.status() == "open").forEach(function(proj) {
     let obj = {};
     addDue(obj, proj)
 

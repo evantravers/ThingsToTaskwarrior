@@ -1,1 +1,3 @@
 tasks.json
+*.md
+!README.md
