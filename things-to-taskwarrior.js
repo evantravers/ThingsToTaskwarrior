@@ -4,8 +4,6 @@
   app = Application.currentApplication()
   app.includeStandardAdditions = true;
 
-  var Someday = Things.lists.byId("TMSomedayListSource").toDos().map(t => t.id());
-
   // Things doesn't give access to a Checklist for a To-do, so I'm scraping the
   // screen for it. :P
   const processChecklist = function(task, toDo) {
@@ -153,6 +151,13 @@
       entry: ISOdate(toDo.creationDate()),
       description: toDo.name(),
       status: "pending"
+    }
+
+    let Someday = Things.lists.byId("TMSomedayListSource").toDos().map(t => t.id());
+    if (Someday.find(id => id == toDo.id())) {
+      task.status = "waiting"
+      // wait a year arbitrarily
+      task.wait   = ISOdate(new Date(new Date().setFullYear(new Date().getFullYear() + 1)))
     }
 
     addTags(task, toDo)
