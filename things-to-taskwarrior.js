@@ -173,19 +173,25 @@
 
   Things.projects().filter(p => p.status() == "open").forEach(function(proj) {
     let obj = {};
-    addDue(obj, proj)
+    addDue(obj, proj);
+    obj.project = `${safe(proj.area().name())}.${safe(proj.name())}`;
 
     let attr = "";
 
-    for (let k in attr) {
-      attr += `\n${k}: ${obj[k]}`
+    for (let k in obj) {
+      attr = attr + `\n${k}: ${obj[k]}`
     }
 
-    let template = `# ${proj.name()}${attr}
+    let template = `---
+${attr}
+---
+
+# ${proj.name()}
 
 ${proj.notes()}
 
-Tasks: \`task project:${safe(proj.name())}\`
+Related:
+- Tasks: \`task project:${obj.project}\`
 `
     writeTextToFile(template, `${safe(proj.name())}.md`)
   })
