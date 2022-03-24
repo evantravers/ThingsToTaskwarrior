@@ -193,7 +193,7 @@ ${proj.notes()}
 Related:
 - Tasks: \`task project:${obj.project}\`
 `
-    writeTextToFile(template, `${safe(proj.name())}.md`)
+    writeTextToFile(template, `${proj.name()}.md`)
   })
 
   writeTextToFile(tasks.map(t => JSON.stringify(t)).join("\n"), "tasks.json")
