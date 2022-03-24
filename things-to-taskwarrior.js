@@ -174,6 +174,7 @@
   Things.projects().filter(p => p.status() == "open").forEach(function(proj) {
     let obj = {};
     addDue(obj, proj);
+    addTags(obj, proj);
     obj.project = `${safe(proj.area().name())}.${safe(proj.name())}`;
 
     let attr = "";
@@ -182,8 +183,7 @@
       attr = attr + `\n${k}: ${obj[k]}`
     }
 
-    let template = `---
-${attr}
+    let template = `---${attr}
 ---
 
 # ${proj.name()}
