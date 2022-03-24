@@ -50,15 +50,8 @@
   // TaskWarrior. This makes most strings TaskWarrior/file-safe.
   const safe = function(str) {
     return str
-      // "Rituals: Daily" -> "Rituals.Daily"
-      .replace(/: /g, '.')
-      // "@Person Name" -> "People.Person Name"
-      .replace(/@/g, 'People.')
-      // "$High" -> "Focus.High"
-      .replace(/\$/g, 'Focus.')
-      // "!Writing" -> "Modality.Writing"
-      .replace(/!/g, 'Modality.')
-      // "Project Name" -> "ProjectName"
+      .replace(/Rituals: /g, '')
+      .replace(/@/g, '')
       .replace(/ /g, '')
       // replace nonstandard characters with "_", avoid double "__", trim start
       // and end of string
@@ -68,20 +61,20 @@
       .replace(/_$/g, '')
   }
 
-  const addTag = function(tags, tag) {
-    if (tag.parentTag()) { addTag(tags, tag.parentTag()); }
+  const computeTag = function(tags, tag) {
+    if (tag.parentTag()) { return `${computeTag(tags, tag.parentTag())}.${safe(tag.name())}`; }
 
-    return tags.push(safe(tag.name()));
+    return safe(tag.name());
   }
 
   const addTags = function(task, toDo) {
     let tags = [];
 
     if (toDo.tags().length > 0) {
-      toDo.tags().forEach(tag => addTag(tags, tag))
+      toDo.tags().forEach(tag => tags.push(computeTag(tags, tag)))
     }
 
-    task.tags = tags;
+    if (tags != []) { task.tags = tags };
   }
 
   const addNotes = function(task, toDo) {
