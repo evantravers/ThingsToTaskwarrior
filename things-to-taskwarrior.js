@@ -46,8 +46,35 @@
     });
   }
 
+  // Things 3 is more forgiving when it comes to tag and project names than
+  // TaskWarrior. This makes most strings TaskWarrior/file-safe.
+  const safe = function(str) {
+    return str
+      // "Rituals: Daily" -> "Rituals.Daily"
+      .replace(/: /g, '.')
+      // "@Person Name" -> "People.Person Name"
+      .replace(/@/g, 'People.')
+      // "$High" -> "Focus.High"
+      .replace(/\$/g, 'Focus.')
+      // "!Writing" -> "Modality.Writing"
+      .replace(/!/g, 'Modality.')
+      // "Project Name" -> "ProjectName"
+      .replace(/ /g, '')
+      // replace nonstandard characters with "_", avoid double "__", trim start
+      // and end of string
+      .replace(/[^a-zA-Z0-9_@.]/g, '_')
+      .replace(/__/g, '_')
+      .replace(/^_/g, '')
+      .replace(/_$/g, '')
+  }
+
   const addTags = function(task, toDo) {
-    if (toDo.tagNames()) { task.tags = toDo.tagNames().split(", ") }
+    if (toDo.tagNames()) {
+      task.tags =
+        toDo.tagNames()
+            .split(", ")
+            .map(t => safe(t))
+    }
   }
 
   const addNotes = function(task, toDo) {
@@ -79,7 +106,7 @@
       dot = "."
     }
 
-    task.project = `${area}${dot}${project}`
+    task.project = `${safe(area)}${dot}${safe(project)}`
   }
 
   // https://taskwarrior.org/docs/using_dates.html#due
