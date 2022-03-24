@@ -171,6 +171,25 @@
     tasks.push(task)
   })
 
+  Things.projects().filter(p => p.status == "open").forEach(function(proj) {
+    let obj = {};
+    addDue(obj, proj)
+
+    let attr = "";
+
+    for (let k in attr) {
+      attr += `\n${k}: ${obj[k]}`
+    }
+
+    let template = `# ${proj.name()}${attr}
+
+${proj.notes()}
+
+Tasks: \`task project:${safe(proj.name())}\`
+`
+    writeTextToFile(template, `${safe(proj.name())}.md`)
+  })
+
   writeTextToFile(tasks.map(t => JSON.stringify(t)).join("\n"), "tasks.json")
   console.log("Now run: `task import tasks.json`")
 })();
