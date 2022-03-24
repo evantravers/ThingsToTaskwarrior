@@ -74,7 +74,7 @@
       toDo.tags().forEach(tag => tags.push(computeTag(tags, tag)))
     }
 
-    if (tags != []) { task.tags = tags };
+    if (tags.length > 0) { task.tags = tags };
   }
 
   const addNotes = function(task, toDo) {
