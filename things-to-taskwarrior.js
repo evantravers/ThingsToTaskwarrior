@@ -68,13 +68,20 @@
       .replace(/_$/g, '')
   }
 
+  const addTag = function(tags, tag) {
+    if (tag.parentTag()) { addTag(tags, tag.parentTag()); }
+
+    return tags.push(safe(tag.name()));
+  }
+
   const addTags = function(task, toDo) {
-    if (toDo.tagNames()) {
-      task.tags =
-        toDo.tagNames()
-            .split(", ")
-            .map(t => safe(t))
+    let tags = [];
+
+    if (toDo.tags().length > 0) {
+      toDo.tags().forEach(tag => addTag(tags, tag))
     }
+
+    task.tags = tags;
   }
 
   const addNotes = function(task, toDo) {
