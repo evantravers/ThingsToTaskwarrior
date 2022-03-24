@@ -156,8 +156,7 @@
     let Someday = Things.lists.byId("TMSomedayListSource").toDos().map(t => t.id());
     if (Someday.find(id => id == toDo.id())) {
       task.status = "waiting"
-      // wait a year arbitrarily
-      task.wait   = ISOdate(new Date(new Date().setFullYear(new Date().getFullYear() + 1)))
+      task.wait   = "someday"
     }
 
     addTags(task, toDo)
