@@ -178,6 +178,7 @@
     tasks.push(task)
   })
 
+  app.doShellScript(`mkdir -p projects`);
   Things.projects().filter(p => p.status() == "open").forEach(function(proj) {
     let obj = {};
     addDue(obj, proj);
@@ -200,7 +201,7 @@ ${proj.notes()}
 Related:
 - Tasks: \`task project:${obj.project}\`
 `
-    writeTextToFile(template, `${proj.name()}.md`)
+    writeTextToFile(template, `projects/${proj.name()}.md`)
   })
 
   writeTextToFile(tasks.map(t => JSON.stringify(t)).join("\n"), "tasks.json")
