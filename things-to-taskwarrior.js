@@ -6,7 +6,7 @@
 
   // Things doesn't give access to a Checklist for a To-do, so I'm scraping the
   // screen for it. :P
-  const processChecklist = function(task, toDo) {
+  const processClipboard = function(task, toDo) {
     app.setTheClipboardTo("[NONE]")
 
     Things.activate()
@@ -16,8 +16,11 @@
     se.keystroke('c', { using: [ 'command down' ] }) // boy this is nasty
     delay(.1)
 
-    let str =
-    app.theClipboard()
+    let clipboard = app.theClipboard()
+
+    let checklist =
+    clipboard
+    .slice() // to make a copy of it
     .replaceAll(/\r/g, "\n")
     .split(/\n/)
     .filter(function(line) {
@@ -28,7 +31,14 @@
     })
     .join("\n")
 
-    if (str != "") { addAnnotation(task, "Checklist:\n" + str) }
+    if (checklist != "") { addAnnotation(task, "Checklist:\n" + checklist) }
+
+    if (clipboard.match("When: Someday")) { scheduledSomeday(task) }
+  }
+
+  const scheduledSomeday = function(task) {
+    task.status = "waiting"
+    task.wait   = "someday"
   }
 
   const ISOdate = function(date) {
@@ -154,16 +164,13 @@
     }
 
     let Someday = Things.lists.byId("TMSomedayListSource").toDos().map(t => t.id());
-    if (Someday.find(id => id == toDo.id())) {
-      task.status = "waiting"
-      task.wait   = "someday"
-    }
+    if (Someday.find(id => id == toDo.id())) { scheduledSomeday(task) }
 
     addTags(task, toDo)
     addNotes(task, toDo)
     addProject(task, toDo)
 
-    processChecklist(task, toDo)
+    processClipboard(task, toDo)
 
     addDue(task, toDo)
     addScheduled(task, toDo)
